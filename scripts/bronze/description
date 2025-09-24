@@ -1,7 +1,7 @@
 The Scripts for this layer are divided into 3 to create:
 
-a. #### Audit Log Table: to capture all changes in this layer for audit purposes
+a. **Audit Log Table**: to capture all changes in this layer for audit purposes
 
-b. #### Staging tables: to hold the raw, fully loaded data from the CV files (saved as bronze.stage_<table_name>)
+b. ** Staging tables **: to hold the raw, fully loaded data from the CV files (saved as bronze.stage_<table_name>)
 
-c. #### Historical tables: to hold current data and merge new data from staging tables. These also indicate where changes are made
+c. ** Historical tables **: to hold current data and merge new data from staging tables. These also indicate where changes are made
