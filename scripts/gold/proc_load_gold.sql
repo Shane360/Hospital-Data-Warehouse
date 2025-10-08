@@ -11,7 +11,9 @@ BEGIN
 			DECLARE @batch_start_time DATETIME2,
 					@batch_end_time DATETIME2,
 					@start_time DATETIME2,
-					@end_time DATETIME2
+					@end_time DATETIME2,
+					@load_name NVARCHAR(100),
+					@rows_updated INT;
 
 			SET @batch_start_time = SYSUTCDATETIME();
 
@@ -19,6 +21,12 @@ BEGIN
 			PRINT '=====================================================================';
 			PRINT '----------- Load from silver.patients into the Gold layer -----------';
 			SET @start_time = SYSUTCDATETIME();
+			SET @load_name = 'gold.dim_patients';
+
+			INSERT INTO etl.metadata_load_log (load_name, start_time, status)
+			VALUES (@load_name, @start_time, 'Started');
+
+			BEGIN TRY
 			IF OBJECT_ID ('gold.dim_patients', 'U') IS NOT NULL
 				DELETE FROM gold.dim_patients;
 			INSERT INTO gold.dim_patients(
@@ -53,11 +61,24 @@ BEGIN
 			PRINT 'Total load time: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR(50)) + ' seconds';
 			PRINT '=================================================================';
 
+			INSERT INTO etl.metadata_load_log(load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, @end_time, 'Success', NULL);
+		END TRY 
+		BEGIN CATCH
+			INSERT INTO etl.metadata_load_log (load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, GETDATE(), 'Failed', ERROR_MESSAGE());
+			THROW;
+		END CATCH;
 
 			-- Gold Doctors
 			PRINT '----------- Load from silver.doctors into gold layer ------------';
 			SET @start_time = SYSUTCDATETIME();
+			SET @load_name = 'gold.dim_doctors';
+			
+			INSERT INTO etl.metadata_load_log (load_name, start_time, status)
+			VALUES (@load_name, @start_time, 'Started');
 
+			BEGIN TRY
 			IF OBJECT_ID ('gold.dim_doctors', 'U') IS NOT NULL
 				DELETE FROM gold.dim_doctors;
 			INSERT INTO gold.dim_doctors (
@@ -85,12 +106,25 @@ BEGIN
 			PRINT '>>>>>>>>> Load complete into gold.doctors >>>>>>>>';
 			PRINT 'Total load time: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR(50)) + ' seconds';
 			PRINT '=================================================================';
+			
+			INSERT INTO etl.metadata_load_log(load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, @end_time, 'Success', NULL);
+		END TRY 
+		BEGIN CATCH
+			INSERT INTO etl.metadata_load_log (load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, GETDATE(), 'Failed', ERROR_MESSAGE());
+			THROW;
+		END CATCH;
 
-
-			-- Gold Appointments
+			-- Gold Appointments	
 			PRINT '----------- Load from silver.appointments into gold layer ------------';
 			SET @start_time = SYSUTCDATETIME();
+			SET @load_name = 'gold.fact_appointments';
 
+			INSERT INTO etl.metadata_load_log (load_name, start_time, status)
+			VALUES (@load_name, @start_time, 'Started');
+
+			BEGIN TRY
 			IF OBJECT_ID ('gold.fact_appointments', 'U') IS NOT NULL
 				DELETE FROM gold.fact_appointments;
 			INSERT INTO gold.fact_appointments (
@@ -118,10 +152,24 @@ BEGIN
 			PRINT '=================================================================';
 
 
+			INSERT INTO etl.metadata_load_log(load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, @end_time, 'Success', NULL);
+		END TRY 
+		BEGIN CATCH
+			INSERT INTO etl.metadata_load_log (load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, GETDATE(), 'Failed', ERROR_MESSAGE());
+			THROW;
+		END CATCH;
+
 			-- Gold Treatments
 			PRINT '----------- Load from silver.treatments into gold layer ------------';
 			SET @start_time = SYSUTCDATETIME();
+			SET @load_name = 'gold.fact_treatment';
 
+			INSERT INTO etl.metadata_load_log (load_name, start_time, status)
+			VALUES (@load_name, @start_time, 'Started');
+
+			BEGIN TRY
 			IF OBJECT_ID ('gold.fact_treatments', 'U') IS NOT NULL
 				DELETE FROM gold.fact_treatments;
 			INSERT INTO gold.fact_treatments (
@@ -146,11 +194,24 @@ BEGIN
 			PRINT 'Total load time: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR(50)) + ' seconds';
 			PRINT '=================================================================';
 
+			INSERT INTO etl.metadata_load_log(load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, @end_time, 'Success', NULL);
+		END TRY 
+		BEGIN CATCH
+			INSERT INTO etl.metadata_load_log (load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, GETDATE(), 'Failed', ERROR_MESSAGE());
+			THROW;
+		END CATCH;
 
 			-- Gold Billing
 			PRINT '----------- Load from silver.billing into gold layer ------------';
 			SET @start_time = SYSUTCDATETIME();
+			SET @load_name = 'gold.fact_billing';
 
+			INSERT INTO etl.metadata_load_log (load_name, start_time, status)
+			VALUES (@load_name, @start_time, 'Started');
+
+			BEGIN TRY
 			IF OBJECT_ID ('gold.fact_billing', 'U') IS NOT NULL
 				DELETE FROM gold.fact_billing;
 			INSERT INTO gold.fact_billing (
@@ -177,6 +238,14 @@ BEGIN
 			PRINT 'Total load time: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR(50)) + ' seconds';
 			PRINT '=================================================================';
 
+			INSERT INTO etl.metadata_load_log(load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, @end_time, 'Success', NULL);
+		END TRY 
+		BEGIN CATCH
+			INSERT INTO etl.metadata_load_log (load_name, start_time, end_time, status, error_message)
+			VALUES (@load_name, @start_time, GETDATE(), 'Failed', ERROR_MESSAGE());
+			THROW;
+		END CATCH;
 
 			SET @batch_end_time = SYSUTCDATETIME();
 			PRINT '>>>>>>>>> Gold Layer Load Complete >>>>>>>>>>>>>>>>>';
