@@ -1,5 +1,3 @@
-
-
 /*
 ------------------------------------------------------------------------
 LOADING INTO THE GOLD LAYER
@@ -18,10 +16,11 @@ BEGIN
 			SET @batch_start_time = SYSUTCDATETIME();
 
 			-- Gold Patients
-			PRINT '----------- Load from silver.patients into gold layer ------------';
+			PRINT '=====================================================================';
+			PRINT '----------- Load from silver.patients into the Gold layer -----------';
 			SET @start_time = SYSUTCDATETIME();
 			IF OBJECT_ID ('gold.dim_patients', 'U') IS NOT NULL
-				TRUNCATE TABLE gold.dim_patients;
+				DELETE FROM gold.dim_patients;
 			INSERT INTO gold.dim_patients(
 				patient_id,
 				first_name,
@@ -60,7 +59,7 @@ BEGIN
 			SET @start_time = SYSUTCDATETIME();
 
 			IF OBJECT_ID ('gold.dim_doctors', 'U') IS NOT NULL
-				TRUNCATE TABLE gold.dim_doctors;
+				DELETE FROM gold.dim_doctors;
 			INSERT INTO gold.dim_doctors (
 				doctor_id,
 				first_name,
@@ -93,7 +92,7 @@ BEGIN
 			SET @start_time = SYSUTCDATETIME();
 
 			IF OBJECT_ID ('gold.fact_appointments', 'U') IS NOT NULL
-				TRUNCATE TABLE gold.fact_appointments;
+				DELETE FROM gold.fact_appointments;
 			INSERT INTO gold.fact_appointments (
 				appointment_id,
 				patient_id,
@@ -124,7 +123,7 @@ BEGIN
 			SET @start_time = SYSUTCDATETIME();
 
 			IF OBJECT_ID ('gold.fact_treatments', 'U') IS NOT NULL
-				TRUNCATE TABLE gold.fact_treatments;
+				DELETE FROM gold.fact_treatments;
 			INSERT INTO gold.fact_treatments (
 				treatment_id,
 				appointment_id,
@@ -153,7 +152,7 @@ BEGIN
 			SET @start_time = SYSUTCDATETIME();
 
 			IF OBJECT_ID ('gold.fact_billing', 'U') IS NOT NULL
-				TRUNCATE TABLE gold.fact_billing;
+				DELETE FROM gold.fact_billing;
 			INSERT INTO gold.fact_billing (
 				bill_id,
 				patient_id,
