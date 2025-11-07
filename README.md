@@ -5,18 +5,18 @@ Building a modern hospital management warehouse using SQL Server, including ETL 
 
 
 This project implements the medalion architecture in developing the ETL pipeline:
-a. Bronze Layer: 
+## a. Bronze Layer: 
 * Staging tables were created to store raw patient data straight from each data source
 * Historical tables were created to keep a record of patient data in the event of future change.
-* An ETL Log table was created to track changes. This table is visible to only the Data Engineer
+* An ETL Log table was created to track changes. This table is visible only to the Data Engineer.
 
   
-b. Silver Layer:
+## b. Silver Layer:
 * UPSERT was used to combine new data with the schemas in the warehouse to ensure that Data Analysts and other authorised professionals can access the most recent data.
 * Initial cleaning was carried out in this stage.
   
 
-c. Gold Layer:
+## c. Gold Layer:
 * Comprehensive preprocessing of the data to prepare it for analysis.
 * The proper designations were given to the dimension (dim_tablename) and fact (fact_tablename) tables.
 * The data is now ready for Ad hoc analyses, BI reporting, and querying by Analysts, Engineers, and Business-level end-users.
