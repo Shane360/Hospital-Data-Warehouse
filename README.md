@@ -24,5 +24,6 @@ This project implements the medalion architecture in developing the ETL pipeline
 ![Hospital Data Integration Model](https://github.com/user-attachments/assets/009ecf98-ac67-4a4a-a6d4-523398d034f0)
 
 
-The final deliverable is a hospital data model with one-to-many relationships from the dimension tables to the fact tables. End-users can safely query the data, analyze, and implement BI reports using the data without having to clean excet where feature engineering is necessary for specific analysis requirements.
+## Final deliverable
+A hospital data model with one-to-many relationships from the dimension tables to the fact tables. End-users can safely query, analyze, and implement BI reports using the data without needing to clean it, except where feature engineering is necessary for specific analysis requirements.
 ![Hospital Data Model](https://github.com/user-attachments/assets/4196aaca-a8fa-4a5c-b9cf-40d366c9dbed)
